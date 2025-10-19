@@ -5,7 +5,7 @@ starting with word1. If a string is longer than the other, append the additional
 of the merged string.
 Return the merged string.
  """
-# need to parse through the letters in 2 words, so use 2 pointers (1 for each string)
+# 2 pointers: need to parse through the letters in 2 words, so use 2 pointers (1 for each string)
 # take characters from pointer A, move pointer down, take from pointer B, move pointer down, etc.
 class Solution:
     def mergeAlternately(self, word1: str, word2: str) -> str:
