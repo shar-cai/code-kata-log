@@ -1,3 +1,56 @@
+'''
+A prefix sum is a running total of an array, where each element is the sum of all preceding elements in the 
+original array up to that index. It's a powerful technique to calculate the sum of any subarray in constant 
+time (O(1) after an initial O(n) preprocessing step. For a subarray from index l to r, the sum is simply the 
+prefix sum at r minus the prefix sum at (l-1). 
+'''
+""" 
+Find Pivot Index (LC 724 Easy)
+Given an array of integers nums, calculate the pivot index of this array.
+The pivot index is the index where the sum of all the numbers strictly to the left of the index is equal 
+to the sum of all the numbers strictly to the index's right.
+If the index is on the left edge of the array, then the left sum is 0 because there are no elements 
+to the left. This also applies to the right edge of the array.
+Return the leftmost pivot index. If no such index exists, return -1.
+"""
+# Create an array sumLeft where sumLeft[i] is the sum of all the numbers to the left of index i.
+# Create an array sumRight where sumRight[i] is the sum of all the numbers to the right of index i.
+# For each index i, check if sumLeft[i] equals sumRight[i]. If so, return i. If no such i is found, return -1.
+class Solution:
+    def pivotIndex(self, nums: List[int]) -> int:
+        sumLeft = [0]*(len(nums)+1)
+        sumRight = [0]*(len(nums)+1)
+
+        # prefix sum for sumLeft, iterating through nums left to right
+        for i in range(len(nums)):
+            sumLeft[i] = sumLeft[i-1] + nums[i]
+
+        # prefix sum for sumRight, iterating through nums right to left
+        sumRight[len(nums)-1] = nums[len(nums)-1]
+        for i in range(len(nums)-2,-1,-1):
+            sumRight[i] = sumRight[i+1] + nums[i] 
+
+        # find when sumLeft[i-1] = sumRight[i+1]
+        for i in range(len(nums)):
+            if sumLeft[i-1] == sumRight[i+1]:
+                return i
+
+        return -1        # no pivot index
+    
+# more efficient soln:
+    def pivotIndex(self, nums: List[int]) -> int:
+        # edge case: if everything after left edge of array is 0, pivot index is 0
+        if(sum(nums[1::])==0):          # [start (inclusive) : stop (exclusive) : step] 
+            return 0
+        # check compare prefix and postfix sums in 1 for loop
+        for i in range(len(nums)-1):
+            if(sum(nums[:i:])==sum(nums[i+1::])):           # sum from 0 to i-1 == sum from i+1 to end
+                return i
+        # edge case: if everything to the left of right edge of array is 0, pivot index is len-1
+        if(sum(nums[0:len(nums)-1:])==0):
+            return len(nums)-1
+        return -1               # no pivot index
+
 """ 
 Find the Highest Altitude (LC 1732 Easy)
 There is a biker going on a road trip. The road trip consists of n + 1 points at different altitudes. 
