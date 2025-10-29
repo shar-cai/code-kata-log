@@ -1,5 +1,5 @@
 """ 
-Can Place Flowers (LC 605)
+Can Place Flowers (LC 605 Easy)
 You have a long flowerbed in which some of the plots are planted, and some are not. 
 However, flowers cannot be planted in adjacent plots.
 Given an integer array flowerbed containing 0's and 1's, where 0 means empty and 1 means not empty, 
@@ -42,3 +42,42 @@ class FasterSolution:
         
         # return True if planted all required flowers or there were more spots (n <= 0)
         return n <= 0
+    
+""" 
+Increasing Triplet Subsequence (LC 334 Medium)
+Given an integer array nums, return true if there exists a triple of indices (i, j, k) 
+such that i < j < k and nums[i] < nums[j] < nums[k]. If no such indices exists, return false.
+"""
+# array: pase through array
+# greedy: try to find triplets as soon as possible (keeping track of the smallest potential "first" and "second" numbers of the triplet as you iterate through the array)
+# Follow up: Could you implement a solution that runs in O(n) time complexity and O(1) space complexity?
+class Solution:
+    def increasingTriplet(self, nums: List[int]) -> bool:
+        # two thresholds
+        tripOne = 999999999999999999999
+        tripTwo = 999999999999999999999
+        
+        for i in range(len(nums)):
+            # if i < tripOne, that is new tripOne
+            if nums[i] < tripOne:
+                tripOne = nums[i]
+            else:
+                # if i > tripOne and < tripTwo, that is new tripTwo
+                if nums[i] < tripTwo and nums[i] > tripOne:
+                    tripTwo = nums[i]
+                else:
+                    # if tripOne < tripTwo < i, triplet found
+                    if tripOne < tripTwo < nums[i]: 
+                        return True
+            print(tripOne, tripTwo)
+        return False            # no triplet found
+    def increasingTriplet(self, nums: List[int]) -> bool:
+        i, j = float("inf"), float("inf")
+        for k in nums:
+            if k <= i:              # need <= so we dont set j to be same num as i
+                i = k
+            elif k <= j:
+                j = k
+            else:
+                return True         # bc if k is greater than i and j, then triplet found
+        return False
